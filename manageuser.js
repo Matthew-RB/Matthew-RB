@@ -1,12 +1,17 @@
 //© 2021 Sean Murdock
 
 let userName = "";
+let phone_number = "";
 let password = "";
 let verifypassword = "";
 let passwordRegEx=/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!]).{6,40})/;
 
 function setusername(){
     userName = $("#username").val();
+}
+
+function setphonenumber(){
+    phone_number = $("#phonenumber").val();
 }
 
 function setuserpassword(){
@@ -51,7 +56,7 @@ function userlogin(){
     setusername();
     $.ajax({
         type: 'POST',
-        url: 'https://dev.stedi.me/login',
+        url: 'https://dev.stedi.me/twofactorlogin/253-263-2354', 
         data: JSON.stringify({userName, password}),
         success: function(data) {
             window.location.href = "/timer.html#"+data;//add the token to the url
@@ -121,6 +126,13 @@ var enterFunction = (event) =>{
         event.preventDefault();
         $("#loginbtn").click();
     }
+}
+
+function sendcode(){
+    $.ajax({
+        type: 'POST',
+        url: 'https://dev.stedi.me/twofactorlogin/' + phone_number,
+    });
 }
 
 var passwordField = document.getElementById("password");
