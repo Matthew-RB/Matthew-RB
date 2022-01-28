@@ -2,24 +2,29 @@
 
 let userName = "";
 let phone_number = "";
+let code = "";
 let password = "";
 let verifypassword = "";
 let passwordRegEx=/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!]).{6,40})/;
 
-function setusername(){
-    userName = $("#username").val();
-}
+//  function setusername(){
+//      userName = $("#username").val();
+//  }
 
 function setphonenumber(){
     phone_number = $("#phonenumber").val();
 }
 
-function setuserpassword(){
-    password = $("#password").val();
-    var valid=passwordRegEx.exec(password);
-    if (!valid){
-        alert('Must be 6 digits, upper, lower, number, and symbol');
-    }
+// function setuserpassword(){
+//     password = $("#password").val();
+//      var valid=passwordRegEx.exec(password);
+//      if (!valid){
+//          alert('Must be 6 digits, upper, lower, number, and symbol');
+//      }
+// }
+
+function setcode(){
+    code = $("#code").val();
 }
 
 function setverifypassword(){
@@ -43,7 +48,7 @@ function checkexpiredtoken(token){
     usertoken = localStorage.getItem("token");
     $.ajax({
        type: 'GET',
-        url: '/validate/'+token,
+        url: 'https://dev.stedi.me/validate/'+token,
         data: JSON.stringify({usertoken}),
         success: function(data){savetoken(data)},
         contentType: "application/text",
@@ -56,7 +61,7 @@ function userlogin(){
     setusername();
     $.ajax({
         type: 'POST',
-        url: 'https://dev.stedi.me/twofactorlogin/253-263-2354', 
+        url: 'https://dev.stedi.me/twofactorlogin', 
         data: JSON.stringify({userName, password}),
         success: function(data) {
             window.location.href = "/timer.html#"+data;//add the token to the url
@@ -133,6 +138,18 @@ function sendcode(){
         type: 'POST',
         url: 'https://dev.stedi.me/twofactorlogin/' + phone_number,
     });
+}
+
+function verifycode(){
+    $.ajax({
+        type: 'POST',
+        url: 'https://dev.stedi.me/twofactorlogin',
+        data: JSON.stringify({"phoneNumber":phone_number,"oneTimePassword":code}),
+         success: function(data){
+             window.location.href = "/timer.html#"+data;//add the token to the url
+         },
+        contentType: "application/text",
+        dataType: 'text' })
 }
 
 var passwordField = document.getElementById("password");
